@@ -1,9 +1,92 @@
 @import "tailwindcss";
 
+:root {
+  --parchment: #e8d8b8;
+  --parchment-light: #f3e8cf;
+  --parchment-dark: #d2bd91;
+
+  --ink: #2b2118;
+  --ink-soft: #5a4935;
+  --ink-muted: #85745d;
+
+  --olive: #536b4f;
+  --olive-dark: #344634;
+
+  --sepia: #9b835e;
+  --rust: #8b3e32;
+}
+
 html,
 body,
 #root {
   margin: 0;
   min-height: 100%;
-  background: #0c0a09;
+  background: var(--parchment);
+  color: var(--ink);
+}
+
+body {
+  background-color: var(--parchment);
+
+  background-image:
+    radial-gradient(
+      rgba(70, 45, 20, 0.055) 0.7px,
+      transparent 0.7px
+    ),
+    radial-gradient(
+      rgba(255, 255, 255, 0.08) 0.8px,
+      transparent 0.8px
+    );
+
+  background-size:
+    7px 7px,
+    11px 11px;
+
+  background-position:
+    0 0,
+    3px 4px;
+}
+
+::selection {
+  background: var(--olive);
+  color: #f7efd9;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--parchment-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sepia);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-soft);
+}
+
+a {
+  color: inherit;
+}
+
+/* Specimen card scrollbar */
+
+.specimen-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.specimen-scroll::-webkit-scrollbar-track {
+  background: #d2bd91;
+}
+
+.specimen-scroll::-webkit-scrollbar-thumb {
+  background: #9b835e;
+}
+
+.specimen-scroll::-webkit-scrollbar-thumb:hover {
+  background: #5a4935;
 }

@@ -11,56 +11,59 @@ import countries from "world-atlas/countries-110m.json";
 import useDinosaurs from "../hooks/useDinosaurs";
 import DinosaursCard from "./DinosaursCard";
 
+/* ─────────────────────────────────────
+   JURASSIC ATLAS — ERA PALETTE
+   Ancient field-journal aesthetic
+───────────────────────────────────── */
+
 const ERAS = [
   {
     key: "Triassic",
     range: "252–201 Mya",
-    accent: "orange",
     classes: {
-      textActive: "text-orange-300",
-      text: "text-orange-400/70",
-      bgActive: "bg-orange-600",
-      bg: "bg-orange-900/40",
-      ring: "ring-orange-500",
-      border: "border-orange-500",
-      glow: "shadow-[0_0_24px_-4px_rgba(249,115,22,0.6)]",
-      fill: "fill-orange-500",
-      fillLight: "fill-orange-300",
+      textActive: "text-[#7f3f2f]",
+      text: "text-[#7f3f2f]/70",
+      bgActive: "bg-[#8b3e32]",
+      bg: "bg-[#8b3e32]/10",
+      ring: "ring-[#8b3e32]",
+      border: "border-[#8b3e32]",
+      fill: "fill-[#8b3e32]",
+      fillLight: "fill-[#b5654d]",
     },
   },
   {
     key: "Jurassic",
     range: "201–145 Mya",
-    accent: "emerald",
     classes: {
-      textActive: "text-emerald-300",
-      text: "text-emerald-400/70",
-      bgActive: "bg-emerald-600",
-      bg: "bg-emerald-900/40",
-      ring: "ring-emerald-500",
-      border: "border-emerald-500",
-      glow: "shadow-[0_0_24px_-4px_rgba(16,185,129,0.6)]",
-      fill: "fill-emerald-500",
-      fillLight: "fill-emerald-300",
+      textActive: "text-[#344634]",
+      text: "text-[#536b4f]/80",
+      bgActive: "bg-[#536b4f]",
+      bg: "bg-[#536b4f]/10",
+      ring: "ring-[#536b4f]",
+      border: "border-[#536b4f]",
+      fill: "fill-[#536b4f]",
+      fillLight: "fill-[#758b70]",
     },
   },
   {
     key: "Cretaceous",
     range: "145–66 Mya",
-    accent: "rose",
     classes: {
-      textActive: "text-rose-300",
-      text: "text-rose-400/70",
-      bgActive: "bg-rose-600",
-      bg: "bg-rose-900/40",
-      ring: "ring-rose-500",
-      border: "border-rose-500",
-      glow: "shadow-[0_0_24px_-4px_rgba(244,63,94,0.6)]",
-      fill: "fill-rose-500",
-      fillLight: "fill-rose-300",
+      textActive: "text-[#684333]",
+      text: "text-[#8b6048]/80",
+      bgActive: "bg-[#8b6048]",
+      bg: "bg-[#8b6048]/10",
+      ring: "ring-[#8b6048]",
+      border: "border-[#8b6048]",
+      fill: "fill-[#8b6048]",
+      fillLight: "fill-[#aa8062]",
     },
   },
 ];
+
+/* ─────────────────────────────────────
+   WORLD MAP
+───────────────────────────────────── */
 
 const CountryLayer = React.memo(function CountryLayer() {
   return (
@@ -70,8 +73,14 @@ const CountryLayer = React.memo(function CountryLayer() {
           <Geography
             key={geo.rsmKey}
             geography={geo}
-            className="fill-stone-800 stroke-stone-950 outline-none transition-colors hover:fill-stone-700"
-            strokeWidth={0.5}
+            className="
+              fill-[#cbb995]
+              stroke-[#806b4d]
+              outline-none
+              transition-colors
+              hover:fill-[#bca982]
+            "
+            strokeWidth={0.45}
           />
         ))
       }
@@ -79,41 +88,73 @@ const CountryLayer = React.memo(function CountryLayer() {
   );
 });
 
+/* ─────────────────────────────────────
+   MAP
+───────────────────────────────────── */
+
 function Map() {
-  const [selectedLocation, setSelectedLocation] = useState(null);
-  const [selectedEra, setSelectedEra] = useState("Jurassic");
+  const [selectedLocation, setSelectedLocation] =
+    useState(null);
+
+  const [selectedEra, setSelectedEra] =
+    useState("Jurassic");
+
   const [zoom, setZoom] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [hoveredId, setHoveredId] = useState(null);
+
+  const [searchTerm, setSearchTerm] =
+    useState("");
+
+  const [selectedCountry, setSelectedCountry] =
+    useState("");
+
+  const [hoveredId, setHoveredId] =
+    useState(null);
 
   const dinosaurs = useDinosaurs();
 
-  const era = ERAS.find((e) => e.key === selectedEra);
+  const era = ERAS.find(
+    (e) => e.key === selectedEra
+  );
+
+  /* ─────────────────────────────────────
+     AVAILABLE COUNTRIES
+  ───────────────────────────────────── */
 
   const availableCountries = useMemo(
     () =>
       [
         ...new Set(
           dinosaurs
-            .map((d) => d.location?.country)
+            .map(
+              (d) =>
+                d.location?.country
+            )
             .filter(Boolean)
         ),
       ].sort(),
     [dinosaurs]
   );
 
+  /* ─────────────────────────────────────
+     FILTER DINOSAURS
+  ───────────────────────────────────── */
+
   const filteredDinosaurs = useMemo(() => {
     return dinosaurs.filter((dinosaur) => {
-      const matchesEra = dinosaur.period === selectedEra;
+      const matchesEra =
+        dinosaur.period === selectedEra;
 
-      const matchesSearch = dinosaur.name
-        ?.toLowerCase()
-        .includes(searchTerm.toLowerCase());
+      const matchesSearch =
+        dinosaur.name
+          ?.toLowerCase()
+          .includes(
+            searchTerm.toLowerCase()
+          );
 
       const matchesCountry =
         selectedCountry === "" ||
-        dinosaur.location?.country === selectedCountry;
+        dinosaur.location?.country ===
+          selectedCountry;
 
       return (
         matchesEra &&
@@ -128,40 +169,122 @@ function Map() {
     selectedCountry,
   ]);
 
+  /* ─────────────────────────────────────
+     RESET SELECTION
+  ───────────────────────────────────── */
+
   const resetSelection = () => {
     setSelectedLocation(null);
   };
 
   return (
-    <div className="relative min-h-screen bg-stone-950 text-stone-200 font-sans">      <div
-        className="pointer-events-none fixed inset-0 opacity-[0.05]"
+    <div
+      className="
+        relative
+        min-h-screen
+        bg-[#e8d8b8]
+        text-[#2b2118]
+        font-sans
+      "
+    >
+      {/* ─────────────────────────────────
+          SUBTLE PAPER TEXTURE
+      ───────────────────────────────── */}
+
+      <div
+        className="
+          pointer-events-none
+          fixed
+          inset-0
+          z-0
+          opacity-[0.22]
+        "
         style={{
           backgroundImage:
-            "radial-gradient(circle, #a8a29e 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
+            "radial-gradient(circle, rgba(74,55,32,0.18) 0.7px, transparent 0.7px)",
+          backgroundSize: "9px 9px",
         }}
       />
 
-      {/* Era-tinted ambient glow */}
+      {/* ─────────────────────────────────
+          ERA AMBIENT TINT
+      ───────────────────────────────── */}
+
       <div
-        className={`pointer-events-none fixed inset-0 transition-colors duration-700 ${era.classes.bg} opacity-30 blur-3xl`}
+        className={`
+          pointer-events-none
+          fixed
+          inset-0
+          z-0
+          transition-colors
+          duration-700
+          ${era.classes.bg}
+        `}
       />
 
-      <div className="relative flex flex-col md:flex-row min-h-screen">
-        {/* STRATA COLUMN */}
-        <aside className="flex md:flex-col border-b md:border-b-0 md:border-r border-stone-800 bg-stone-900/60 backdrop-blur-sm">
-          <div className="hidden md:block px-4 pt-5 pb-3">
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-stone-500">
+      {/* ─────────────────────────────────
+          MAIN LAYOUT
+      ───────────────────────────────── */}
+
+      <div
+        className="
+          relative
+          z-10
+          flex
+          min-h-screen
+          flex-col
+          md:flex-row
+        "
+      >
+        {/* ═══════════════════════════════
+            STRATIGRAPHIC COLUMN
+        ═══════════════════════════════ */}
+
+        <aside
+          className="
+            flex
+            border-b
+            border-[#9b835e]
+            bg-[#d2bd91]/95
+            md:flex-col
+            md:border-b-0
+            md:border-r
+          "
+        >
+          {/* Header */}
+
+          <div className="hidden px-5 pb-4 pt-6 md:block">
+            <p
+              className="
+                font-mono
+                text-[10px]
+                uppercase
+                tracking-[0.2em]
+                text-[#85745d]
+              "
+            >
               Stratigraphic
             </p>
 
-            <p className="font-serif text-sm text-stone-300">
+            <p
+              className="
+                mt-1
+                font-serif
+                text-base
+                text-[#2b2118]
+              "
+            >
               Column
             </p>
+
+            <div className="mt-4 h-px bg-[#9b835e]/60" />
           </div>
 
+          {/* Eras */}
+
           {ERAS.map((e) => {
-            const isActive = e.key === selectedEra;
+            const isActive =
+              e.key === selectedEra;
 
             return (
               <button
@@ -170,28 +293,86 @@ function Map() {
                   setSelectedEra(e.key);
                   resetSelection();
                 }}
-                className={`group relative flex-1 md:flex-none flex md:flex-col items-center md:items-start justify-center gap-1 px-5 py-4 md:py-6 md:px-5 text-left transition-all duration-300 border-l-4 md:border-l-0 md:border-t-4 ${
-                  isActive
-                    ? `${e.classes.border} ${e.classes.bg} ${e.classes.glow}`
-                    : "border-transparent hover:bg-stone-800/50"
-                }`}
-              >
-                <span
-                  className={`font-serif text-base md:text-lg tracking-wide transition-colors ${
+                className={`
+                  group
+                  relative
+                  flex
+                  flex-1
+                  items-center
+                  justify-center
+                  gap-1
+                  border-l-4
+                  px-5
+                  py-4
+                  text-left
+                  transition-all
+                  duration-300
+                  md:flex-none
+                  md:flex-col
+                  md:items-start
+                  md:border-l-0
+                  md:border-t-4
+                  md:px-5
+                  md:py-7
+
+                  ${
                     isActive
-                      ? e.classes.textActive
-                      : "text-stone-400 group-hover:text-stone-200"
-                  }`}
+                      ? `${e.classes.border} ${e.classes.bg}`
+                      : "border-transparent hover:bg-[#e8d8b8]/60"
+                  }
+                `}
+              >
+                {/* Small archive mark */}
+
+                <span
+                  className={`
+                    absolute
+                    left-2
+                    top-1/2
+                    hidden
+                    -translate-y-1/2
+                    text-xs
+                    opacity-50
+                    md:block
+                    ${
+                      isActive
+                        ? e.classes.textActive
+                        : "text-[#85745d]"
+                    }
+                  `}
+                >
+                  ◆
+                </span>
+
+                <span
+                  className={`
+                    font-serif
+                    text-base
+                    tracking-wide
+                    transition-colors
+                    md:text-lg
+                    ${
+                      isActive
+                        ? e.classes.textActive
+                        : "text-[#5a4935] group-hover:text-[#2b2118]"
+                    }
+                  `}
                 >
                   {e.key}
                 </span>
 
                 <span
-                  className={`font-mono text-[10px] tracking-wider transition-colors ${
-                    isActive
-                      ? e.classes.text
-                      : "text-stone-600"
-                  }`}
+                  className={`
+                    font-mono
+                    text-[10px]
+                    tracking-wider
+                    transition-colors
+                    ${
+                      isActive
+                        ? e.classes.text
+                        : "text-[#85745d]"
+                    }
+                  `}
                 >
                   {e.range}
                 </span>
@@ -200,17 +381,60 @@ function Map() {
           })}
         </aside>
 
-        {/* MAIN COLUMN */}
-      <div className="relative flex-1 min-h-screen bg-stone-950">          {/* FLOATING TOOLBAR */}
-          <div className="relative z-20 flex flex-wrap items-center gap-3 p-4 md:p-5 border-b border-stone-800 bg-stone-950/70 backdrop-blur-md">
+        {/* ═══════════════════════════════
+            MAIN COLUMN
+        ═══════════════════════════════ */}
+
+        <div
+          className="
+            relative
+            flex-1
+            min-h-screen
+            bg-[#e8d8b8]
+          "
+        >
+          {/* ═══════════════════════════════
+              TOOLBAR
+          ═══════════════════════════════ */}
+
+          <div
+            className="
+              relative
+              z-20
+              flex
+              flex-wrap
+              items-center
+              gap-3
+              border-b
+              border-[#9b835e]
+              bg-[#f3e8cf]/95
+              p-4
+              md:p-5
+            "
+          >
             {/* Search */}
-            <div className="relative flex-1 min-w-[180px]">
+
+            <div
+              className="
+                relative
+                min-w-[180px]
+                flex-1
+              "
+            >
               <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-500"
+                className="
+                  absolute
+                  left-3
+                  top-1/2
+                  h-4
+                  w-4
+                  -translate-y-1/2
+                  text-[#85745d]
+                "
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                strokeWidth={2}
+                strokeWidth={1.8}
               >
                 <path
                   strokeLinecap="round"
@@ -224,41 +448,91 @@ function Map() {
                 placeholder="Search specimen..."
                 value={searchTerm}
                 onChange={(e) => {
-                  setSearchTerm(e.target.value);
+                  setSearchTerm(
+                    e.target.value
+                  );
                   resetSelection();
                 }}
-                className={`w-full rounded-md border border-stone-700 bg-stone-900/80 py-2 pl-9 pr-3 text-sm text-stone-200 placeholder:text-stone-500 outline-none transition-colors focus:ring-1 ${era.classes.ring}`}
+                className={`
+                  w-full
+                  rounded-[3px]
+                  border
+                  border-[#9b835e]
+                  bg-[#f8efdc]
+                  py-2
+                  pl-9
+                  pr-3
+                  text-sm
+                  text-[#2b2118]
+                  placeholder:text-[#85745d]
+                  outline-none
+                  transition-all
+                  focus:bg-[#fff7e7]
+                  focus:ring-1
+                  ${era.classes.ring}
+                `}
               />
             </div>
 
             {/* Country */}
+
             <div className="relative">
               <select
                 value={selectedCountry}
                 onChange={(e) => {
-                  setSelectedCountry(e.target.value);
+                  setSelectedCountry(
+                    e.target.value
+                  );
                   resetSelection();
                 }}
-                className={`appearance-none rounded-md border border-stone-700 bg-stone-900/80 py-2 pl-3 pr-8 text-sm text-stone-200 outline-none transition-colors focus:ring-1 ${era.classes.ring}`}
+                className={`
+                  appearance-none
+                  rounded-[3px]
+                  border
+                  border-[#9b835e]
+                  bg-[#f3e8cf]
+                  py-2
+                  pl-3
+                  pr-8
+                  text-sm
+                  text-[#2b2118]
+                  outline-none
+                  transition-colors
+                  focus:ring-1
+                  ${era.classes.ring}
+                `}
               >
-                <option value="">All countries</option>
+                <option value="">
+                  All countries
+                </option>
 
-                {availableCountries.map((country) => (
-                  <option
-                    key={country}
-                    value={country}
-                  >
-                    {country}
-                  </option>
-                ))}
+                {availableCountries.map(
+                  (country) => (
+                    <option
+                      key={country}
+                      value={country}
+                    >
+                      {country}
+                    </option>
+                  )
+                )}
               </select>
 
               <svg
-                className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-stone-500"
+                className="
+                  pointer-events-none
+                  absolute
+                  right-2.5
+                  top-1/2
+                  h-3.5
+                  w-3.5
+                  -translate-y-1/2
+                  text-[#85745d]
+                "
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
-                strokeWidth={2}
+                strokeWidth={1.8}
               >
                 <path
                   strokeLinecap="round"
@@ -269,6 +543,7 @@ function Map() {
             </div>
 
             {/* Clear */}
+
             <button
               onClick={() => {
                 setSearchTerm("");
@@ -276,20 +551,60 @@ function Map() {
                 setSelectedEra("Jurassic");
                 resetSelection();
               }}
-              className="rounded-md border border-stone-700 px-3 py-2 text-sm text-stone-400 transition-all hover:border-stone-500 hover:bg-stone-800 hover:text-stone-200"
+              className="
+                rounded-[3px]
+                border
+                border-[#9b835e]
+                bg-[#f3e8cf]
+                px-3
+                py-2
+                text-sm
+                text-[#5a4935]
+                transition-all
+                hover:bg-[#e8d8b8]
+                hover:text-[#2b2118]
+              "
             >
               Clear
             </button>
 
             {/* Result counter */}
-            <div className="ml-auto flex items-center gap-2 rounded-full border border-stone-800 bg-stone-900/70 px-3 py-1.5">
+
+            <div
+              className="
+                ml-auto
+                flex
+                items-center
+                gap-2
+                border
+                border-[#9b835e]
+                bg-[#d2bd91]/60
+                px-3
+                py-1.5
+                rounded-[3px]
+              "
+            >
               <span
-                className={`h-2 w-2 rounded-full ${era.classes.bgActive}`}
+                className={`
+                  h-2
+                  w-2
+                  rounded-full
+                  ${era.classes.bgActive}
+                `}
               />
 
-              <span className="font-mono text-xs text-stone-400">
+              <span
+                className="
+                  font-mono
+                  text-xs
+                  text-[#5a4935]
+                "
+              >
                 <span
-                  className={`${era.classes.textActive} font-semibold`}
+                  className={`
+                    font-semibold
+                    ${era.classes.textActive}
+                  `}
                 >
                   {filteredDinosaurs.length}
                 </span>{" "}
@@ -298,8 +613,81 @@ function Map() {
             </div>
           </div>
 
-          {/* MAP */}
-        <div className="relative min-h-[calc(100vh-96px)] bg-stone-950">            {selectedLocation && (
+          {/* ═══════════════════════════════
+              MAP
+          ═══════════════════════════════ */}
+
+          <div
+            className="
+              relative
+              min-h-[calc(100vh-96px)]
+              overflow-hidden
+              bg-[#e8d8b8]
+            "
+          >
+            {/* Decorative map texture */}
+
+            <div
+              className="
+                pointer-events-none
+                absolute
+                inset-0
+                z-0
+                opacity-30
+              "
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, rgba(74,55,32,0.16) 0.6px, transparent 0.6px)",
+                backgroundSize: "10px 10px",
+              }}
+            />
+
+            {/* Small map label */}
+
+            <div
+              className="
+                pointer-events-none
+                absolute
+                bottom-5
+                left-5
+                z-10
+                hidden
+                border
+                border-[#9b835e]/70
+                bg-[#f3e8cf]/80
+                px-3
+                py-2
+                md:block
+              "
+            >
+              <p
+                className="
+                  font-mono
+                  text-[9px]
+                  uppercase
+                  tracking-[0.18em]
+                  text-[#85745d]
+                "
+              >
+                Fossil Occurrence Map
+              </p>
+
+              <p
+                className="
+                  mt-1
+                  font-serif
+                  text-xs
+                  italic
+                  text-[#5a4935]
+                "
+              >
+                Jurassic Atlas Archive
+              </p>
+            </div>
+
+            {/* Dinosaur card */}
+
+            {selectedLocation && (
               <DinosaursCard
                 dinosaur={selectedLocation}
                 onClose={resetSelection}
@@ -308,8 +696,17 @@ function Map() {
 
             <ComposableMap
               projection="geoEqualEarth"
-              projectionConfig={{ scale: 150 }}
-              className="block w-full h-[calc(100vh-96px)] bg-stone-950"            >
+              projectionConfig={{
+                scale: 150,
+              }}
+              className="
+                relative
+                z-[1]
+                block
+                h-[calc(100vh-96px)]
+                w-full
+              "
+            >
               <ZoomableGroup
                 minZoom={1}
                 maxZoom={8}
@@ -319,71 +716,85 @@ function Map() {
               >
                 <CountryLayer />
 
-                {filteredDinosaurs.map((dinosaur) => {
-                  const isSelected =
-                    selectedLocation?.occurrenceId ===
-                    dinosaur.occurrenceId;
+                {/* Fossil markers */}
 
-                  const isHovered =
-                    hoveredId === dinosaur.occurrenceId;
+                {filteredDinosaurs.map(
+                  (dinosaur) => {
+                    const isSelected =
+                      selectedLocation?.occurrenceId ===
+                      dinosaur.occurrenceId;
 
-                  const r = Math.max(
-                    1,
-                    3 / zoom
-                  );
+                    const isHovered =
+                      hoveredId ===
+                      dinosaur.occurrenceId;
 
-                  return (
-                    <Marker
-                      key={dinosaur.occurrenceId}
-                      coordinates={
-                        dinosaur.location.coordinates
-                          .coordinates
-                      }
-                    >
-                      {/* Selected marker glow */}
-                      {isSelected && (
+                    const r = Math.max(
+                      1,
+                      3 / zoom
+                    );
+
+                    return (
+                      <Marker
+                        key={
+                          dinosaur.occurrenceId
+                        }
+                        coordinates={
+                          dinosaur.location
+                            .coordinates
+                            .coordinates
+                        }
+                      >
+                        {/* Selected marker */}
+
+                        {isSelected && (
+                          <circle
+                            r={r * 2.4}
+                            className={`
+                              ${era.classes.fill}
+                              opacity-30
+                              animate-ping
+                            `}
+                          />
+                        )}
+
+                        {/* Main marker */}
+
                         <circle
-                          r={r * 2.4}
-                          className={`${era.classes.fill} opacity-40 animate-ping`}
-                        />
-                      )}
-
-                      {/* Main marker */}
-                      <circle
-                        r={
-                          isHovered
-                            ? r * 1.7
-                            : r
-                        }
-                        className={`
-                          ${
-                            isSelected
-                              ? era.classes.fillLight
-                              : era.classes.fill
+                          r={
+                            isHovered
+                              ? r * 1.7
+                              : r
                           }
-                          stroke-white/80
-                          cursor-pointer
-                          transition-all
-                          duration-150
-                        `}
-                        strokeWidth={0.8}
-                        onMouseEnter={() =>
-                          setHoveredId(
-                            dinosaur.occurrenceId
-                          )
-                        }
-                        onMouseLeave={() =>
-                          setHoveredId(null)
-                        }
-                        onClick={() =>
-                          setSelectedLocation(
-                            dinosaur
-                          )
-                        }
-                      />
-                    </Marker>
-                  );
-                })}
+                          className={`
+                            ${
+                              isSelected
+                                ? era.classes.fillLight
+                                : era.classes.fill
+                            }
+                            stroke-[#f3e8cf]
+                            cursor-pointer
+                            transition-all
+                            duration-150
+                          `}
+                          strokeWidth={0.8}
+                          onMouseEnter={() =>
+                            setHoveredId(
+                              dinosaur.occurrenceId
+                            )
+                          }
+                          onMouseLeave={() =>
+                            setHoveredId(null)
+                          }
+                          onClick={() =>
+                            setSelectedLocation(
+                              dinosaur
+                            )
+                          }
+                        />
+                      </Marker>
+                    );
+                  }
+                )}
               </ZoomableGroup>
             </ComposableMap>
           </div>
