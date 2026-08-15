@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "name": "Allosaurus",
+    "era": "Jurassic",
+    "location": "Dinosaur National Monument",
+    "state": "Utah",
+    "country": "United States",
+    "coordinates": [-109.3071, 40.4381],
+    "image": "https://tse2.mm.bing.net/th/id/OIP.WxGM7brcJY2AzvZQ9neIhwHaFj?r=0&pid=Api&P=0&h=180",
+    "description": "A large carnivorous theropod dinosaur known from the Morrison Formation."
+  },
+  {
+    "id": 2,
+    "name": "Allosaurus fragilis",
+    "era": "Jurassic",
+    "location": "Cleveland-Lloyd Dinosaur Quarry",
+    "state": "Utah",
+    "country": "United States",
+    "coordinates": [-110.6864, 39.3239],
+    "image": "https://tse1.mm.bing.net/th/id/OIP.J4eAZORLIlJxVWIL1qzURQHaE8?r=0&pid=Api&P=0&h=180",
+    "description": "A large predatory dinosaur from the Morrison Formation. Cleveland-Lloyd is especially notable for its unusually dense concentration of Allosaurus fossils."
+  },
+  {
+    "id": 3,
+    "name": "Stegosaurus",
+    "era": "Jurassic",
+    "location": "Dinosaur Ridge",
+    "state": "Colorado",
+    "country": "United States",
+    "coordinates": [-105.1929, 39.6835],
+    "image": "https://tse1.mm.bing.net/th/id/OIP.jUa2xir3BC5tfnywVPTapwHaEJ?r=0&pid=Api&P=0&h=180",
+    "description": "A plated herbivorous dinosaur known from the Late Jurassic Morrison Formation."
+  },
+  {
+  "id": 4,
+  "name": "Coelophysis",
+  "era": "Triassic",
+  "location": "Ghost Ranch",
+  "state": "New Mexico",
+  "country": "United States",
+  "coordinates": [-106.3167, 36.3333],
+  "image": "https://tse3.mm.bing.net/th/id/OIP.dpN6SIDmVl6RrZyA7rLevQHaFE?r=0&pid=Api&P=0&h=180",
+  "description": "A small, lightweight carnivorous dinosaur from the Late Triassic, famously known from the Ghost Ranch fossil locality."
+  },
+  {
+  "id": 5,
+  "name": "Tyrannosaurus rex",
+  "era": "Cretaceous",
+  "location": "Hell Creek Formation",
+  "state": "Montana",
+  "country": "United States",
+  "coordinates": [-107.5, 47.5],
+  "image": "https://tse2.mm.bing.net/th/id/OIP.ed4Irzk0HXpdhI3fhar3cgHaE8?r=0&pid=Api&P=0&h=180",
+  "description": "One of the best-known large predatory dinosaurs of the Late Cretaceous, represented by fossils from the Hell Creek Formation."
+  },
+  {
+  "id": 6,
+  "name": "Triceratops",
+  "era": "Cretaceous",
+  "location": "Lance Formation",
+  "state": "Wyoming",
+  "country": "United States",
+  "coordinates": [-106.8, 42.7],
+  "image": "https://tse4.mm.bing.net/th/id/OIP.q7b_gifCsAz10gBY7HvqzwHaE1?r=0&pid=Api&P=0&h=180",
+  "description": "A large herbivorous dinosaur with three horns, known from Late Cretaceous rocks including the Lance Formation."
+}
+]

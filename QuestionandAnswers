@@ -1,0 +1,230 @@
+1. STAR — Tell me about your project
+
+S — Situation
+Fossil and dinosaur occurrence data is available through sources like the Paleobiology Database, but it is not presented in a simple, interactive way for users to explore dinosaur fossil locations around the world.
+
+T — Task
+The goal was to build a full-stack web application where users can explore dinosaur fossil occurrences on an interactive world map, filter them by geological period, and view detailed information about individual occurrences.
+
+A — Action
+I built the frontend using React and an interactive world map. I created a Node.js and Express backend with separate routes, controllers, and Mongoose models. I integrated the Paleobiology Database API to fetch real fossil occurrence data, transformed the API response into my application's schema, and stored it in MongoDB Atlas. I used PBDB's occurrence ID as a unique identifier and implemented bulk upserts so repeated imports don't create duplicate records. I also integrated Wikimedia Commons for dinosaur images and implemented logic to prefer life-restoration images while keeping image enrichment separate from the core data import.
+
+R — Result
+The application can now fetch real-world fossil occurrence data, store it in MongoDB, expose it through a REST API, and visualize the locations on an interactive world map. The data pipeline is also designed to scale because repeated imports update existing occurrences instead of deleting and recreating the dataset.
+
+2. PREP — Explain technical decisions
+We'll use this whenever the interviewer asks "Why did you use X?"
+
+Why MongoDB?
+P — Point
+I chose MongoDB to store the dinosaur occurrence data.
+
+R — Reason
+The data comes from an external API and contains nested information such as location, coordinates, image metadata, and source information. MongoDB's document structure fits this type of data naturally.
+
+E — Evidence
+Instead of splitting information across multiple relational tables, we can store an occurrence as a single document containing its taxon, period, location, coordinates, formation, and source.
+
+P — Point
+So MongoDB simplified storing and retrieving the occurrence data while still supporting geospatial indexing for future location-based queries.
+
+
+Why Express?
+P
+I used Express to build the backend REST API.
+
+R
+React should not communicate directly with MongoDB. Express provides a controlled layer between the frontend and database.
+
+E
+Our flow is:
+
+React
+ ↓
+Express API
+ ↓
+Controller
+ ↓
+Mongoose
+ ↓
+MongoDB
+
+This also gives us a place to handle validation, errors, authentication later, and business logic.
+
+P
+Therefore Express acts as the API layer between the frontend and our database.
+
+Why use an API instead of putting PBDB data directly into React?
+P
+I used the backend to fetch and process PBDB data instead of having React directly consume PBDB.
+R
+The backend gives us control over the external data.
+E
+We can:
+PBDB
+ ↓
+filter
+ ↓
+transform
+ ↓
+validate
+ ↓
+store in MongoDB
+ ↓
+serve our own API
+
+This also means the frontend doesn't depend directly on PBDB's response structure.
+
+P
+So the backend acts as an abstraction layer between the external data source and our frontend.
+
+
+3. Problem → Approach → Trade-off
+
+This is where you show engineering thinking.
+
+Problem: Re-importing data caused potential duplication
+Problem
+
+We wanted to import more PBDB records without deleting the existing dataset or creating duplicates.
+
+Approach
+
+We used PBDB's occurrenceId as a unique identifier and implemented:
+
+bulkWrite()
+
+with:
+
+upsert: true
+
+So:
+
+Existing occurrence → UPDATE
+New occurrence      → INSERT
+Trade-off
+
+Bulk upserts are more complex than simply deleting the collection and using insertMany(), but they allow incremental imports and preserve existing data.
+
+
+Problem: Wikimedia rate limiting
+Problem
+
+Initially, we requested an image from Wikimedia for every PBDB occurrence.
+
+That caused:
+
+100 occurrences
+ ↓
+many duplicate taxa
+ ↓
+many Wikimedia requests
+ ↓
+429 Too Many Requests
+Approach
+
+We recognized that an image belongs to the taxon, while PBDB records represent occurrences.
+
+So we separated:
+
+Occurrence data → PBDB
+Image enrichment → Wikimedia
+
+and planned to fetch images once per unique taxon rather than once per occurrence.
+
+Trade-off
+
+This adds another enrichment step to the system, but it prevents image-service failures from breaking the core fossil-data import.
+
+
+Problem: External API data doesn't match our application's structure
+Problem
+
+PBDB gives fields such as:
+
+tna
+lng
+lat
+cc2
+stp
+ggc
+sfm
+oid
+
+but our frontend needs a cleaner structure.
+
+Approach
+
+We transform:
+
+PBDB format
+ ↓
+our Dinosaur schema
+
+For example:
+
+coordinates: [
+  Number(record.lng),
+  Number(record.lat)
+]
+
+and:
+
+occurrenceId: record.oid
+Trade-off
+
+We have to write transformation logic, but our frontend and database aren't tightly coupled to PBDB's raw API structure.
+
+What was the biggest challenge you faced in the project?"
+
+"One of the biggest challenges was enriching the fossil records with dinosaur images. The fossil occurrence data came from PBDB, but PBDB doesn't directly provide the kind of dinosaur illustrations I wanted for the UI, so I integrated Wikimedia Commons as a secondary data source.
+
+The challenge was that I couldn't simply make one Wikimedia request for every fossil occurrence. I had around 4,787 usable fossil occurrences but 1,249 unique taxon names, so I designed the enrichment process around unique names to avoid duplicate API requests.
+
+I also encountered Wikimedia's 429 Too Many Requests response when making too many requests. I therefore added rate-limit handling, delays, caching, and made the image enrichment a separate process from the core PBDB importer so that an image API failure wouldn't break the main data pipeline.
+
+Another problem was data accuracy. During testing, I searched for 'Abditosaurus kuehnei' and Wikimedia initially returned a Saltasaurus image. So I realized that getting an HTTP 200 response doesn't necessarily mean the returned image is semantically correct. I changed the matching logic to verify that the dinosaur name appears in the result's title or metadata before accepting the image.
+
+I also store the image URL along with its source, attribution, and license, rather than treating the image as an anonymous external asset. So the final system treats images as optional enrichment: if a reliable image isn't found, the fossil record still works and the UI shows a fallback."
+
+That's a very strong answer because you're showing that you encountered actual engineering problems rather than just implementing tutorials.
+
+If they ask: "Why did you separate image enrichment?"
+
+Say:
+
+"Because images are secondary data. PBDB is the core source for fossil occurrences, coordinates and geological information. If Wikimedia is unavailable or rate-limited, I still want the application to have its core fossil data. So I separated the two pipelines."
+
+That's an excellent architecture point:
+
+             PBDB
+              ↓
+       Core fossil data
+              ↓
+           MongoDB
+              ↑
+              │
+      Image enrichment
+              ↓
+        Wikimedia
+If they ask: "Why not fetch images when the user opens a marker?"
+
+You can say:
+
+"That would introduce latency into the user experience and would potentially generate repeated external API requests. Instead, I prefer pre-enriching the records and caching the result in MongoDB. The frontend then reads the image like any other field."
+
+If they ask: "What happens when there is no image?"
+
+"The fossil record is still stored. The image field remains empty and the frontend displays a 'No image available' fallback. The image is an optional enrichment, not a dependency for the fossil data."
+
+And one thing I'd not say
+
+Don't say:
+
+❌ "Wikimedia gives me the dinosaur image."
+
+That's too simplistic.
+
+Say:
+
+✅ "I use Wikimedia Commons as a secondary image source and validate the search result before storing it."
