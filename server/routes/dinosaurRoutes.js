@@ -1,8 +1,14 @@
 import express from "express";
-import { getDinosaurs } from "../controllers/dinosaurController.js";
+
+import {
+  getDinosaurs,
+  askAboutDinosaur,
+} from "../controllers/dinosaurController.js";
 
 const router = express.Router();
 
 router.get("/", getDinosaurs);
+
+router.post("/:id/ask", askAboutDinosaur);
 
 export default router;
