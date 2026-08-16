@@ -6,7 +6,7 @@ const useDinosaurs = () => {
   useEffect(() => {
     const fetchDinosaurs = async () => {
       try {
-        const API_URL = import.meta.env.VITE_API_URL || "https://jurassic-atlas.onrender.com";
+        const API_URL = (import.meta.env.VITE_API_URL || "https://jurassic-atlas.onrender.com").replace(/\/+$/, "");
         const response = await fetch(`${API_URL}/api/dinosaurs`);
         if (!response.ok) {
           throw new Error("Failed to fetch dinosaurs");
