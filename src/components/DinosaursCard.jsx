@@ -135,8 +135,9 @@ const DinosaursCard = ({ dinosaur, onClose }) => {
       setLoadingAI(true);
       setAnswer("");
 
+      const API_URL = import.meta.env.VITE_API_URL || "https://jurassic-atlas.onrender.com";
       const response = await fetch(
-        `/api/dinosaurs/${dinosaur._id}/ask`,
+        `${API_URL}/api/dinosaurs/${dinosaur._id}/ask`,
         {
           method: "POST",
           headers: {
