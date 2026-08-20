@@ -31,6 +31,22 @@ Explore dinosaur fossil occurrences across geological eras, inspect specimen inf
 
 ---
 
+## 📸 Screenshots
+
+### Interactive Fossil Map
+
+<img width="1919" height="916" alt="Screenshot 2026-08-20 202649" src="https://github.com/user-attachments/assets/35a8ae9e-1613-4aa1-9e7a-b4f76d380f6d" />
+
+
+### Dinosaur Specimen
+
+<img width="1916" height="912" alt="Screenshot 2026-08-20 202742" src="https://github.com/user-attachments/assets/45ba10cf-238f-4cc0-bcb4-b09773afc5ed" />
+
+
+### T-RexAI
+
+<img width="633" height="869" alt="Screenshot 2026-08-20 202843" src="https://github.com/user-attachments/assets/b2d9e074-7f28-4f4a-abe8-b224d97d0da9" />
+
 ## 🛠️ Tech Stack
 
 ### Frontend
