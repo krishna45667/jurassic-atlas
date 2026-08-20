@@ -112,7 +112,7 @@ Explore dinosaur fossil occurrences across geological eras, inspect specimen inf
        └─────────────────┘
 ## 📂 Project Structure
 
-```text
+
 jurassic-atlas/
 │
 ├── public/
@@ -157,13 +157,6 @@ jurassic-atlas/
 └── README.md
 
 
-You can keep the `...` where we don't need to document every tiny file.
-
----
-
-# 🚀 Getting Started
-
-```md
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -176,7 +169,6 @@ Make sure you have the following installed:
 
 ### Clone the Repository
 
-```bash
 git clone https://github.com/krishna45667/jurassic-atlas.git
 cd jurassic-atlas
 
