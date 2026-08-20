@@ -83,7 +83,6 @@ Explore dinosaur fossil occurrences across geological eras, inspect specimen inf
 
 ## 🏗️ Architecture
 
-```text
                     ┌─────────────────────┐
                     │      React.js       │
                     │    Vite + UI        │
