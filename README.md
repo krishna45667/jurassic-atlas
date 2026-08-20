@@ -110,3 +110,112 @@ Explore dinosaur fossil occurrences across geological eras, inspect specimen inf
        │      PBDB       │
        │ Fossil Dataset  │
        └─────────────────┘
+## 📂 Project Structure
+
+```text
+jurassic-atlas/
+│
+├── public/
+│   └── dinosaur-images/
+│
+├── server/
+│   ├── config/
+│   │   └── db.js
+│   │
+│   ├── controllers/
+│   │   └── dinosaurController.js
+│   │
+│   ├── models/
+│   │   └── Dinosaur.js
+│   │
+│   ├── routes/
+│   │   └── dinosaurRoutes.js
+│   │
+│   ├── utils/
+│   │   ├── ai.js
+│   │   └── ...
+│   │
+│   ├── enrichImages.js
+│   ├── importPBDB.js
+│   └── server.js
+│
+├── src/
+│   ├── components/
+│   │   ├── DinosaursCard.jsx
+│   │   └── Map.jsx
+│   │
+│   ├── pages/
+│   │   └── ...
+│   │
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
+│
+├── package.json
+├── vite.config.js
+├── .gitignore
+└── README.md
+
+
+You can keep the `...` where we don't need to document every tiny file.
+
+---
+
+# 🚀 Getting Started
+
+```md
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure you have the following installed:
+
+- Node.js
+- MongoDB Atlas account
+- Google Gemini API key
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/krishna45667/jurassic-atlas.git
+cd jurassic-atlas
+
+Install Dependencies
+
+Install frontend dependencies from the project root:
+
+npm install
+
+Then install backend dependencies:
+
+cd server
+npm install
+Environment Variables
+
+Create a .env file inside the server directory:
+
+MONGO_URI=your_mongodb_connection_string
+GEMINI_API_KEY=your_gemini_api_key
+PORT=5000
+
+Never commit your .env file or expose your API keys publicly.
+
+Run the Backend
+
+From the server directory:
+
+node server.js
+
+The backend will run on:
+
+http://localhost:5000
+Run the Frontend
+
+Open another terminal and return to the project root:
+
+cd ..
+npm run dev
+
+The frontend will be available at the local Vite development URL shown in the terminal.
+
+
